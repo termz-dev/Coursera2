@@ -1,82 +1,60 @@
 import React, { Component } from "react";
-import { Card, CardText, CardImg, CardBody, CardTitle } from "reactstrap";
-
+import { CardBody, CardTitle, CardImg, Card, CardText } from "reactstrap";
 
 class DishDetail extends Component {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        this.state = {
-            dish: this.props.dish
-        }
-    }
+    this.state = {
+      dish: this.props.dish
+    };
+  }
 
-    renderDish(dish) {
-        if(dish!= null) {
-            return (
-                <div className="row">
-                <div className="col-12 col-md-5">
-                    <Card>
-                        <CardImg src={dish.image} alt={dish.name} />
-                        <CardBody>
-                            <CardTitle>{dish.name}</CardTitle>
-                            <CardText>{dish.description}</CardText>
-                        </CardBody>
-                    </Card>
-                </div>
-                </div>
-            );
-        } else {
-            return(
-                <div></div>
-            );
-        }
-    }
-
-
-    renderComment(comments) {
-        if (comments == null) {
-            return(
-                <div></div>
-            );
-        }
-        const comt = 
-            comments.map(comment => {
-                return (  
-                    <div key={comment.id}>
-                        <p> {comment.comment} </p>
-                        <p> -- {comment.author} {comment.date} </p>
+  renderDish(dish) {
+    if (dish != null) {
+      return (
+        <div className="container">
+          <div className="row">
+            <div className="col-12 col-md-5">
+              <Card>
+                <CardImg src={dish.image} alt={dish.img} />
+                <CardBody>
+                  <CardTitle>{dish.name}</CardTitle>
+                  <p>{dish.description}</p>
+                </CardBody>
+              </Card>
+            </div>
+            <div className="col-12 col-md-5">
+              <Card>
+                <h2>Comments</h2>
+                <CardText>
+                  {dish.comments.map((comment) => (
+                    <div className="coms-row" key={comment.id}>
+                      <p>{comment.comment}</p>
+                      <p>-- {comment.author}, {new Intl.DateTimeFormat('en-US',{year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(comment.date)))}</p>
                     </div>
-                );
-            })
-       return (
-        <div className="col-12 col-md-5">
-            <h4>Comments</h4>
-            {comt}
+                  ))}
+                </CardText>
+              </Card>
+            </div>
+          </div>
         </div>
-       )
+      );
+    } else {
+      return <div></div>;
+    }
+  }
+
+  render() {
+    const dish = this.props.dish;
+
+    if (dish == null) {
+      return <div></div>;
     }
 
-    render() {
-        const dish = this.props.dish
-        if(dish == null) {
-            return(
-                <div></div>
-            );
-        }
-        const rend = this.renderDish(dish);
-        const coms = this.renderComment(dish.comments); 
-   
-
-    return (
-       <div className="row">
-       {rend}
-       {coms}
-       </div>
-    );
-
-}
-
+    const rend = this.renderDish(dish);
+    return <div className="row">{rend}</div>;
+  }
 }
 
 export default DishDetail;
