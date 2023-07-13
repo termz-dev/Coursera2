@@ -79,6 +79,7 @@ const DishDetail = (props) => {
     </div>
     </div>
 
+
   );
 };
 
