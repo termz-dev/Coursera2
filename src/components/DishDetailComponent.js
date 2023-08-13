@@ -1,13 +1,102 @@
-import React from "react";
-import { CardBody, CardTitle, CardImg, Card, Breadcrumb, BreadcrumbItem } from "reactstrap";
+import { React, useState } from "react";
+import { CardBody, CardTitle, Col, Label, Row, CardImg, Card, Breadcrumb, BreadcrumbItem, Button, Modal, ModalHeader, ModalBody } from "reactstrap";
 import { Link } from "react-router-dom";
+import { Control, LocalForm, Errors } from 'react-redux-form'
+
+
+const required = (val) => val && val.length;
+const maxLength = (len) => (val) => !(val) || (val.length <= len);
+const minLength = (len) => (val) => val && (val.length >= len);
+
+
+
+const CommentForm = () => {
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const toggleModal = () => {
+    setModalOpen(!modalOpen);
+  };
+
+  return (
+    <div>
+      <Button color="white" onClick={toggleModal}>
+        Submit Comments
+      </Button>
+
+      <Modal isOpen={modalOpen} toggle={toggleModal}>
+           <ModalHeader toggle={toggleModal}>Submit Comment</ModalHeader>
+                <ModalBody>
+                     <LocalForm onSubmit={(values) => this.handleSubmit(values)}>
+                          <Row className="form-group">
+                                <Label htmlFor="firstname" md={4}>Rating</Label>
+                                <Col md={{size:12}}>
+                                    <Control.select model=".contactType" name='contactType'
+                                    className='form-control' >
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
+                                    </Control.select>
+                                </Col>
+                            </Row>
+
+                                 <Row className="form-group">
+                                 <Label htmlFor="Your name" md={4}>Your Name</Label>
+                                <Col md={12}>
+                                    <Control.text model=".yourname" id="yourname" name="yourname"
+                                        placeholder="Your Name"
+                                        className="form-control"
+                                        validators={{
+                                            required, minLength: minLength(3), maxLength: maxLength(15)
+                                        }}
+                                         />
+                                    <Errors
+                                        className="text-danger"
+                                        model=".yourname"
+                                        show="touched"
+                                        messages={{
+                                            required: 'Required',
+                                            minLength: 'Must be greater than 2 characters',
+                                            maxLength: 'Must be 15 characters or less'
+                                        }}
+                                     />
+                                </Col>
+                            </Row>
+
+                            <Row className="form-group">
+                                <Label htmlFor="message" md={2}>Comment</Label>
+                                <Col md={12}>
+                                    <Control.textarea model=".message" id="message" name="message"
+                                        rows="7"
+                                        className="form-control" />
+                                </Col>
+                            </Row>
+
+                            <Row className="form-group">
+                            <Col md={{size:12}}>
+                                    <Button type="submit" color="primary">
+                                    Submit
+                                    </Button>
+                              </Col>
+                              </Row>
+
+                            
+                      </LocalForm>
+                  </ModalBody>
+            </Modal>
+    </div>
+  );
+};
+
+
 
 function RenderDish({ dish }) {
   if (dish != null) {
     return (
       <div className="container">
         <div className="row">
-          <div className="col-12 col-md-5">
+          <div className="col-12">
             <Card>
               <CardImg src={dish.image} alt={dish.img} />
               <CardBody>
@@ -23,9 +112,12 @@ function RenderDish({ dish }) {
 }
 
 function RenderComments({ comments }) {
+
+
+
   if (comments != null) {
     return (
-      <div className="col-12 col-md-5 m-1">
+      <div className="col-12">
         <h4>Comments</h4>
         <ul className="list-unstyled">
           {comments.map((comment) => (
@@ -42,6 +134,7 @@ function RenderComments({ comments }) {
             </li>
           ))}
         </ul>
+        <CommentForm />
       </div>
     );
   } else {
