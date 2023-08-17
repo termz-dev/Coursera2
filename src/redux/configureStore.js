@@ -11,7 +11,7 @@ export const ConfigureStore = () => {
         dishes: Dishes,
         comments: Comments,
         leaders: Leaders,
-        Promotions: Promotions
+        promotions: Promotions
       })
     );
 
