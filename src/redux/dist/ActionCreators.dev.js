@@ -5,9 +5,11 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.addComment = void 0;
+exports.addDishes = exports.dishesFailed = exports.dishesLoading = exports.fetchDishes = exports.addComment = void 0;
 
 var ActionTypes = _interopRequireWildcard(require("./ActionTypes"));
+
+var _dishes = require("../components/shared/dishes");
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -26,3 +28,40 @@ var addComment = function addComment(dishId, rating, author, comment) {
 };
 
 exports.addComment = addComment;
+
+var fetchDishes = function fetchDishes() {
+  return function (dispatch) {
+    dispatch(dishesLoading(true));
+    setTimeout(function () {
+      dispatch(addDishes(_dishes.DISHES));
+    }, 2000);
+  };
+};
+
+exports.fetchDishes = fetchDishes;
+
+var dishesLoading = function dishesLoading() {
+  return {
+    type: ActionTypes.DISHES_LOADING
+  };
+};
+
+exports.dishesLoading = dishesLoading;
+
+var dishesFailed = function dishesFailed(errmess) {
+  return {
+    type: ActionTypes.DISHES_FAILED,
+    payload: errmess
+  };
+};
+
+exports.dishesFailed = dishesFailed;
+
+var addDishes = function addDishes(dishes) {
+  return {
+    type: ActionTypes.ADD_DISHES,
+    payload: dishes
+  };
+};
+
+exports.addDishes = addDishes;
