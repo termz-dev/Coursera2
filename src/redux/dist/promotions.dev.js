@@ -5,7 +5,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Dishes = void 0;
+exports.Promotions = void 0;
 
 var ActionTypes = _interopRequireWildcard(require("./ActionTypes"));
 
@@ -19,34 +19,34 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var Dishes = function Dishes() {
+var Promotions = function Promotions() {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
     isloading: true,
     errMess: null,
-    dishes: []
+    promotions: []
   };
   var action = arguments.length > 1 ? arguments[1] : undefined;
 
   switch (action.type) {
-    case ActionTypes.ADD_DISHES:
+    case ActionTypes.ADD_PROMOS:
       return _objectSpread({}, state, {
         isloading: false,
         errMess: null,
-        dishes: action.payload
+        promotions: action.payload
       });
 
-    case ActionTypes.DISHES_LOADING:
+    case ActionTypes.PROMOS_LOADING:
       return _objectSpread({}, state, {
         isloading: true,
         errMess: null,
-        dishes: []
+        promotions: []
       });
 
-    case ActionTypes.DISHES_FAILED:
+    case ActionTypes.PROMOS_FAILED:
       return _objectSpread({}, state, {
         isloading: false,
         errMess: action.payload,
-        dishes: []
+        promotions: []
       });
 
     default:
@@ -54,4 +54,4 @@ var Dishes = function Dishes() {
   }
 };
 
-exports.Dishes = Dishes;
+exports.Promotions = Promotions;
