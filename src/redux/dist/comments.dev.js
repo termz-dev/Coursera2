@@ -43,9 +43,6 @@ var Comments = function Comments() {
 
     case ActionTypes.ADD_COMMENT:
       var comment = action.payload;
-      comment.id = state.comments.length;
-      comment.date = new Date().toISOString();
-      console.log("Comment: ", comment);
       return _objectSpread({}, state, {
         comments: state.comments.concat(comment)
       });

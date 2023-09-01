@@ -5,7 +5,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.addPromos = exports.promosFailed = exports.promosLoading = exports.fetchPromos = exports.addComments = exports.commentsFailed = exports.fetchComments = exports.addDishes = exports.dishesFailed = exports.dishesLoading = exports.fetchDishes = exports.addComment = void 0;
+exports.addPromos = exports.promosFailed = exports.promosLoading = exports.fetchPromos = exports.addComments = exports.commentsFailed = exports.fetchComments = exports.addDishes = exports.dishesFailed = exports.dishesLoading = exports.fetchDishes = exports.postComment = exports.addComment = void 0;
 
 var ActionTypes = _interopRequireWildcard(require("./ActionTypes"));
 
@@ -15,19 +15,54 @@ function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return 
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-var addComment = function addComment(dishId, rating, author, comment) {
+var addComment = function addComment(comment) {
   return {
     type: ActionTypes.ADD_COMMENT,
-    payload: {
-      dishId: dishId,
-      rating: rating,
-      author: author,
-      comment: comment
-    }
+    payload: comment
   };
 };
 
 exports.addComment = addComment;
+
+var postComment = function postComment(dishId, rating, author, comment) {
+  return function (dispatch) {
+    var newComment = {
+      dishId: dishId,
+      rating: rating,
+      author: author,
+      comment: comment
+    };
+    newComment.date = new Date().toISOString();
+    return fetch(_baseURL.baseURL + 'comments', {
+      method: 'POST',
+      body: JSON.stringify(newComment),
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'same-origin'
+    }).then(function (response) {
+      if (response.ok) {
+        return response;
+      } else {
+        var error = new Error('Error ' + response.status + ': ' + response.statusText);
+        error.response = response;
+        throw error;
+      }
+    }, function (error) {
+      var errmess = new Error(error.message);
+      throw errmess;
+    }).then(function (response) {
+      return response.json();
+    }).then(function (response) {
+      return dispatch(addComment(response));
+    })["catch"](function (error) {
+      console.log('Post comments', error.message);
+      alert('Your comment could not be posted\nError: ' + error.message);
+    });
+  };
+};
+
+exports.postComment = postComment;
 
 var fetchDishes = function fetchDishes() {
   return function (dispatch) {
